@@ -1,0 +1,13 @@
+node_modules/*
+dev/*
+.idea/*
+.DS_Store
+tsc-dist/*
+bengular/generated/**
+!**/.gitkeep
+
+*.tsbuildinfo
+*.css.map
+
+src/**/*.js
+src/**/*.css
