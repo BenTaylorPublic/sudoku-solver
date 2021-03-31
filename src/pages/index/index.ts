@@ -1,4 +1,6 @@
 import {SudokuState} from "../../shared/sudoku-state";
+import {SudokuAlgorithm} from "../../shared/sudoku-algorithm";
+import {DepthFirst} from "../../shared/algorithms/depth-first";
 
 class IndexView {
 
@@ -87,6 +89,12 @@ class IndexView {
                 }
             }
         }
+        this.solvingLogic(startingState);
+    }
+
+    private static solvingLogic(startingState: SudokuState): void {
+        const algorithm: SudokuAlgorithm = new DepthFirst();
+
     }
 }
 
