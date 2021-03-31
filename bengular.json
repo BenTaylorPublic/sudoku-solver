@@ -1,0 +1,9 @@
+{
+  "verbose": false,
+  "pagesDirectory": "./src/pages/",
+  "srcDirectory": "./src/",
+  "generatedDirectory": "./generated/",
+  "prodDirectory": "./docs/",
+  "componentsDirectory": "./src/components/",
+  "assetsDirectory": "./src/assets/"
+}
