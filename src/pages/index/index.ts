@@ -22,7 +22,7 @@ class IndexView {
             for (let x: number = 0; x < 9; x++) {
                 const input: HTMLInputElement = document.createElement("input");
                 input.type = "number";
-                input.id = `${x}-${y}`;
+                input.id = `${y}-${x}`;
                 input.min = "1";
                 input.max = "9";
                 input.onkeyup = this.validate.bind(this);
@@ -53,7 +53,7 @@ class IndexView {
         const validValues: string[] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", ""];
         for (let y: number = 0; y < 9; y++) {
             for (let x: number = 0; x < 9; x++) {
-                const id: string = `${x}-${y}`;
+                const id: string = `${y}-${x}`;
                 const input: HTMLInputElement = document.getElementById(id) as HTMLInputElement;
                 if (!validValues.includes(input.value)) {
                     //Invalid
@@ -74,17 +74,19 @@ class IndexView {
     }
 
     private static start(): void {
+        this.startButton.disabled = true;
+
         const startingState: SudokuState = new SudokuState();
 
         for (let y: number = 0; y < 9; y++) {
             for (let x: number = 0; x < 9; x++) {
-                const id: string = `${x}-${y}`;
+                const id: string = `${y}-${x}`;
                 const input: HTMLInputElement = document.getElementById(id) as HTMLInputElement;
-                startingState.setInitialValue(x, y, Number(input.value));
+                if (input.value !== "") {
+                    startingState.setInitialValue(x, y, Number(input.value));
+                }
             }
         }
-
-        console.log(startingState);
     }
 }
 
