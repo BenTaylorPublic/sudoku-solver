@@ -1,9 +1,12 @@
+import {SudokuState} from "../../shared/sudoku-state";
+
 class IndexView {
 
     private static startButton: HTMLInputElement;
 
     public static initialize(): void {
         this.startButton = document.getElementById("startButton") as HTMLInputElement;
+        this.startButton.onclick = this.start.bind(this);
         this.createEntryInputs();
         this.validate();
     }
@@ -68,6 +71,20 @@ class IndexView {
         }
 
         this.startButton.disabled = false;
+    }
+
+    private static start(): void {
+        const startingState: SudokuState = new SudokuState();
+
+        for (let y: number = 0; y < 9; y++) {
+            for (let x: number = 0; x < 9; x++) {
+                const id: string = `${x}-${y}`;
+                const input: HTMLInputElement = document.getElementById(id) as HTMLInputElement;
+                startingState.setInitialValue(x, y, Number(input.value));
+            }
+        }
+
+        console.log(startingState);
     }
 }
 
