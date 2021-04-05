@@ -11,4 +11,8 @@ export class SudokuCell {
         this.value = value;
         this.locked = true;
     }
+
+    public get needsValue(): boolean {
+        return this.value == null;
+    }
 }
