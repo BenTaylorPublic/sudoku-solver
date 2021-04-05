@@ -1,21 +1,31 @@
-#stepOne {
-  width: 336px;
+body {
+  display: flex;
 }
 
 #entry {
+  width: 336px;
+  padding: 10px;
+}
+
+#inputBoxes,
+#visualizationBoxes {
   .row {
     display: flex;
 
     .verticalSection {
       margin-left: 5px;
       margin-right: 5px;
+      display: flex;
 
-      input {
+      input,
+      div {
+        background-color: grey;
         width: 30px;
         height: 30px;
         text-align: center;
         font-size: 20px;
         border: 1px solid black;
+        padding: 1px;
         //For disabling the arrows
         &::-webkit-outer-spin-button,
         &::-webkit-inner-spin-button {
@@ -38,4 +48,9 @@
 
 #startButton {
   margin-top: 10px;
+}
+
+#visualization {
+  border-left: 3px solid white;
+  padding: 10px;
 }
