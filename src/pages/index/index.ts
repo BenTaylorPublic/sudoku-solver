@@ -8,10 +8,14 @@ import {StepAction} from "../../shared/enums";
 class IndexView {
 
     private static startButton: HTMLButtonElement;
+    private static stepButton: HTMLButtonElement;
+    private static algorithm: SudokuAlgorithm;
 
     public static initialize(): void {
         this.startButton = document.getElementById("startButton") as HTMLButtonElement;
         this.startButton.onclick = this.start.bind(this);
+        this.stepButton = document.getElementById("stepButton") as HTMLButtonElement;
+        this.stepButton.onclick = this.step.bind(this);
         this.createEntryInputs();
         this.validate();
         this.createVisualizationDivs();
@@ -130,12 +134,28 @@ class IndexView {
     }
 
     private static solvingLogic(startingState: SudokuState): void {
-        const algorithm: SudokuAlgorithm = new DepthFirst();
+        this.algorithm = new DepthFirst();
 
-        algorithm.setup(startingState);
+        this.algorithm.setup(startingState);
 
-        const state: DrawableSudokuState = algorithm.step();
+        const autoStep: boolean = (document.getElementById("autostep") as HTMLInputElement).checked;
+        if (autoStep) {
+            throw new Error("Not implemented");
+        } else {
+            this.stepButton.disabled = false;
+        }
+
+    }
+
+    private static step(): void {
+        this.stepButton.disabled = true;
+        const state: DrawableSudokuState = this.algorithm.step();
         this.draw(state);
+        if (state.isSolved || this.algorithm.givenUp) {
+            alert("End");
+            return;
+        }
+        this.stepButton.disabled = false;
     }
 
     private static draw(state: DrawableSudokuState): void {
