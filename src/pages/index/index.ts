@@ -7,10 +7,10 @@ import {StepAction} from "../../shared/enums";
 
 class IndexView {
 
-    private static startButton: HTMLInputElement;
+    private static startButton: HTMLButtonElement;
 
     public static initialize(): void {
-        this.startButton = document.getElementById("startButton") as HTMLInputElement;
+        this.startButton = document.getElementById("startButton") as HTMLButtonElement;
         this.startButton.onclick = this.start.bind(this);
         this.createEntryInputs();
         this.validate();
