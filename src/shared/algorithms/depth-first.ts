@@ -1,5 +1,6 @@
 import {SudokuAlgorithm} from "../sudoku-algorithm";
 import {SudokuState} from "../sudoku-state";
+import {DrawableSudokuState} from "../drawable-sudoku-state";
 
 export class DepthFirst implements SudokuAlgorithm {
     public name: string = "Depth First";
@@ -7,7 +8,7 @@ export class DepthFirst implements SudokuAlgorithm {
     setup(initialBoard: SudokuState): void {
     }
 
-    step(): SudokuState {
+    step(): DrawableSudokuState {
         //@ts-ignore
         return null;
     }

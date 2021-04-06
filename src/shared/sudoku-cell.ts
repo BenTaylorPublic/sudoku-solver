@@ -7,6 +7,14 @@ export class SudokuCell {
         this.value = null;
     }
 
+
+    public static clone(cell: SudokuCell): SudokuCell {
+        const result: SudokuCell = new SudokuCell();
+        result.locked = cell.locked;
+        result.value = cell.value;
+        return result;
+    }
+
     public setInitialValue(value: number): void {
         this.value = value;
         this.locked = true;

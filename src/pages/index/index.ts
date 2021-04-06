@@ -2,6 +2,8 @@ import {SudokuState} from "../../shared/sudoku-state";
 import {SudokuAlgorithm} from "../../shared/sudoku-algorithm";
 import {DepthFirst} from "../../shared/algorithms/depth-first";
 import {SudokuCell} from "../../shared/sudoku-cell";
+import {DrawableSudokuState} from "../../shared/drawable-sudoku-state";
+import {StepAction} from "../../shared/enums";
 
 class IndexView {
 
@@ -123,7 +125,7 @@ class IndexView {
                 }
             }
         }
-        this.draw(startingState);
+        this.initialDraw(startingState);
         this.solvingLogic(startingState);
     }
 
@@ -132,14 +134,18 @@ class IndexView {
 
         algorithm.setup(startingState);
 
-        let state: SudokuState;
-        do {
-            state = algorithm.step();
-        } while (!state.isSolved || algorithm.givenUp);
-        this.draw(state);
+        let state: DrawableSudokuState;
+        if (false) {
+            do {
+                state = algorithm.step();
+                this.draw(state);
+            } while (!state.isSolved || algorithm.givenUp);
+
+            this.draw(state);
+        }
     }
 
-    private static draw(state: SudokuState): void {
+    private static draw(state: DrawableSudokuState): void {
         for (let y: number = 0; y < 9; y++) {
             for (let x: number = 0; x < 9; x++) {
                 const id: string = `v-${y}-${x}`;
@@ -157,14 +163,36 @@ class IndexView {
                     div.classList.remove("locked");
                 }
 
-                div.classList.remove("lastCellSet");
+                div.classList.remove("assigned");
+                div.classList.remove("failedToAssign");
             }
         }
 
-        if (state.lastCellSet != null) {
-            const id: string = `v-${state.lastCellSet.y}-${state.lastCellSet.x}`;
+        if (state.lastActionedCell != null) {
+            const id: string = `v-${state.lastActionedCell.y}-${state.lastActionedCell.x}`;
             const div: HTMLDivElement = document.getElementById(id) as HTMLDivElement;
-            div.classList.add("lastCellSet");
+            if (state.action === StepAction.Assigned) {
+                div.classList.add("assigned");
+            } else {
+                div.classList.add("failedToAssign");
+            }
+        }
+    }
+
+    private static initialDraw(state: SudokuState): void {
+        for (let y: number = 0; y < 9; y++) {
+            for (let x: number = 0; x < 9; x++) {
+                const id: string = `v-${y}-${x}`;
+                const div: HTMLDivElement = document.getElementById(id) as HTMLDivElement;
+                const cell: SudokuCell = state.cells[y][x];
+                if (cell.value != null) {
+                    div.innerText = cell.value.toString();
+                }
+
+                if (cell.locked) {
+                    div.classList.add("locked");
+                }
+            }
         }
     }
 }
