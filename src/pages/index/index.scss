@@ -1,10 +1,21 @@
 body {
-  display: flex;
+  background-color: black;
+  color: white;
 }
 
-#entry {
-  width: 336px;
+#top {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 25%;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  width: 50%;
+}
+
+.topSection {
   padding: 10px;
+  text-align: center;
 }
 
 #inputBoxes,
@@ -46,11 +57,12 @@ body {
   }
 }
 
-#startButton {
+#controls {
   margin-top: 10px;
-}
-
-#visualization {
-  border-left: 3px solid white;
-  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 60px;
 }
