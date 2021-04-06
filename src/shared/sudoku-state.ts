@@ -19,6 +19,17 @@ export class SudokuState {
         this.cells[y][x].setInitialValue(value);
     }
 
+    get isSolved(): boolean {
+        for (let y: number = 0; y < 9; y++) {
+            for (let x: number = 0; x < 9; x++) {
+                if (this.cells[y][x].needsValue) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public isValid(x: number, y: number, value: number): boolean {
         //Make sure cell isn't set
         if (!this.cells[y][x].needsValue) {

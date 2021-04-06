@@ -10,4 +10,6 @@ export abstract class SudokuAlgorithm {
 
     //Returns the state that should be drawn to the gui
     public abstract step(): SudokuState;
+
+    public abstract get givenUp(): boolean;
 }

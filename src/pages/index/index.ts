@@ -130,6 +130,13 @@ class IndexView {
     private static solvingLogic(startingState: SudokuState): void {
         const algorithm: SudokuAlgorithm = new DepthFirst();
 
+        algorithm.setup(startingState);
+
+        let state: SudokuState;
+        do {
+            state = algorithm.step();
+        } while (!state.isSolved || algorithm.givenUp);
+        this.draw(state);
     }
 
     private static draw(state: SudokuState): void {

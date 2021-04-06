@@ -12,5 +12,8 @@ export class DepthFirst implements SudokuAlgorithm {
         return null;
     }
 
+    get givenUp(): boolean {
+        return false;
+    }
 
 }
