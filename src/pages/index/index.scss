@@ -43,6 +43,10 @@ body {
           &.locked {
             background-color: #009900;
           }
+
+          &.lastCellSet {
+            background-color: #000099;
+          }
         }
 
 
