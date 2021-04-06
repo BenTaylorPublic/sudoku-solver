@@ -134,15 +134,8 @@ class IndexView {
 
         algorithm.setup(startingState);
 
-        let state: DrawableSudokuState;
-        if (false) {
-            do {
-                state = algorithm.step();
-                this.draw(state);
-            } while (!state.isSolved || algorithm.givenUp);
-
-            this.draw(state);
-        }
+        const state: DrawableSudokuState = algorithm.step();
+        this.draw(state);
     }
 
     private static draw(state: DrawableSudokuState): void {

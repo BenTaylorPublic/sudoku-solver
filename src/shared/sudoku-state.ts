@@ -16,6 +16,7 @@ export class SudokuState {
         } else {
             this.cells = [];
             for (let y: number = 0; y < 9; y++) {
+                this.cells.push([]);
                 for (let x: number = 0; x < 9; x++) {
                     this.cells[y][x] = SudokuCell.clone(cells[y][x]);
                 }
