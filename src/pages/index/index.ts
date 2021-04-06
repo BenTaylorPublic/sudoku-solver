@@ -1,6 +1,7 @@
 import {SudokuState} from "../../shared/sudoku-state";
 import {SudokuAlgorithm} from "../../shared/sudoku-algorithm";
 import {DepthFirst} from "../../shared/algorithms/depth-first";
+import {SudokuCell} from "../../shared/sudoku-cell";
 
 class IndexView {
 
@@ -87,6 +88,7 @@ class IndexView {
             for (let x: number = 0; x < 9; x++) {
                 const div: HTMLDivElement = document.createElement("div");
                 div.id = `v-${y}-${x}`;
+                div.classList.add("vCell");
                 verticalSection.appendChild(div);
 
                 if (x === 2 || x === 5) {
@@ -121,12 +123,42 @@ class IndexView {
                 }
             }
         }
+        this.draw(startingState);
         this.solvingLogic(startingState);
     }
 
     private static solvingLogic(startingState: SudokuState): void {
         const algorithm: SudokuAlgorithm = new DepthFirst();
 
+    }
+
+    private static draw(state: SudokuState): void {
+        for (let y: number = 0; y < 9; y++) {
+            for (let x: number = 0; x < 9; x++) {
+                const id: string = `v-${y}-${x}`;
+                const div: HTMLDivElement = document.getElementById(id) as HTMLDivElement;
+                const cell: SudokuCell = state.cells[y][x];
+                if (cell.value == null) {
+                    div.innerText = "";
+                } else {
+                    div.innerText = cell.value.toString();
+                }
+
+                if (cell.locked) {
+                    div.classList.add("locked");
+                } else {
+                    div.classList.remove("locked");
+                }
+
+                div.classList.remove("lastCellSet");
+            }
+        }
+
+        if (state.lastCellSet != null) {
+            const id: string = `v-${state.lastCellSet.y}-${state.lastCellSet.x}`;
+            const div: HTMLDivElement = document.getElementById(id) as HTMLDivElement;
+            div.classList.add("lastCellSet");
+        }
     }
 }
 

@@ -34,9 +34,18 @@ body {
         width: 30px;
         height: 30px;
         text-align: center;
+        line-height: 30px;
         font-size: 20px;
         border: 1px solid black;
         padding: 1px;
+
+        &.vCell {
+          &.locked {
+            background-color: #009900;
+          }
+        }
+
+
         //For disabling the arrows
         &::-webkit-outer-spin-button,
         &::-webkit-inner-spin-button {
