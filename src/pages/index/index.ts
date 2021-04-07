@@ -133,14 +133,24 @@ class IndexView {
         this.solvingLogic(startingState);
     }
 
-    private static solvingLogic(startingState: SudokuState): void {
+    private static async solvingLogic(startingState: SudokuState): Promise<void> {
         this.algorithm = new DepthFirst();
 
         this.algorithm.setup(startingState);
 
         const autoStep: boolean = (document.getElementById("autostep") as HTMLInputElement).checked;
         if (autoStep) {
-            throw new Error("Not implemented");
+            let state: DrawableSudokuState;
+            do {
+                state = this.algorithm.step();
+                this.draw(state);
+                await this.delay(1);
+                if ((state.isSolved && state.action === StepAction.Assigned) || this.algorithm.givenUp) {
+                    break;
+                }
+            } while (true);
+            console.log(`solved: ${state.isSolved}`);
+            console.log(`givenUp: ${this.algorithm.givenUp}`);
         } else {
             this.stepButton.disabled = false;
         }
@@ -207,6 +217,10 @@ class IndexView {
                 }
             }
         }
+    }
+
+    private static async delay(ms: number): Promise<void> {
+        await new Promise(resolve => setTimeout(() => resolve(1), ms));
     }
 }
 
