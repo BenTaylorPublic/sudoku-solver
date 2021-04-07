@@ -53,7 +53,6 @@ export class DepthFirst implements SudokuAlgorithm {
             //Otherwise it is 9, so reset it to 1
             this.nextToAssign = 1;
         }
-        console.log("Stack size: " + this.stack.length);
         return new DrawableSudokuState(clone.cells, firstOpenCell, action);
     }
 

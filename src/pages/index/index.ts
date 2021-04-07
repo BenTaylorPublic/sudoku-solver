@@ -9,6 +9,8 @@ class IndexView {
 
     private static startButton: HTMLButtonElement;
     private static stepButton: HTMLButtonElement;
+    private static runTypeSelect: HTMLSelectElement;
+    private static inputX: HTMLInputElement;
     private static algorithm: SudokuAlgorithm;
 
     public static initialize(): void {
@@ -16,6 +18,9 @@ class IndexView {
         this.startButton.onclick = this.start.bind(this);
         this.stepButton = document.getElementById("stepButton") as HTMLButtonElement;
         this.stepButton.onclick = this.step.bind(this);
+        this.runTypeSelect = document.getElementById("runType") as HTMLSelectElement;
+        this.runTypeSelect.onchange = this.runTypeChange.bind(this);
+        this.inputX = document.getElementById("inputX") as HTMLInputElement;
         this.createEntryInputs();
         this.validate();
         this.createVisualizationDivs();
@@ -115,6 +120,15 @@ class IndexView {
         }
     }
 
+    private static runTypeChange(): void {
+        const value: RunType = this.runTypeSelect.value as RunType;
+        if (value === "manual") {
+            this.inputX.disabled = true;
+        } else {
+            this.inputX.disabled = false;
+        }
+    }
+
     private static start(): void {
         this.startButton.disabled = true;
 
@@ -138,20 +152,37 @@ class IndexView {
 
         this.algorithm.setup(startingState);
 
-        const autoStep: boolean = (document.getElementById("autostep") as HTMLInputElement).checked;
-        if (autoStep) {
+        const autoStep: RunType = (document.getElementById("runType") as HTMLInputElement).value as RunType;
+        if (autoStep === "autoStepDelay") {
+            const delay: number = Number(this.inputX.value);
             let state: DrawableSudokuState;
             do {
                 state = this.algorithm.step();
                 this.draw(state);
-                await this.delay(1);
+                await this.delay(delay);
                 if ((state.isSolved && state.action === StepAction.Assigned) || this.algorithm.givenUp) {
                     break;
                 }
             } while (true);
-            console.log(`solved: ${state.isSolved}`);
-            console.log(`givenUp: ${this.algorithm.givenUp}`);
-        } else {
+        } else if (autoStep === "autoStepGroupDraw") {
+            const drawEveryXSteps: number = Number(this.inputX.value);
+            let stepCount: number = 0;
+            let state: DrawableSudokuState;
+            do {
+                state = this.algorithm.step();
+                stepCount++;
+                if (stepCount === drawEveryXSteps) {
+                    stepCount = 0;
+                    this.draw(state);
+                    //Delay to let it draw to dom
+                    await this.delay(1);
+                }
+                if ((state.isSolved && state.action === StepAction.Assigned) || this.algorithm.givenUp) {
+                    break;
+                }
+            } while (true);
+            this.draw(state);
+        } else if (autoStep === "manual") {
             this.stepButton.disabled = false;
         }
 

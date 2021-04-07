@@ -26,9 +26,22 @@
 </div>
 <div id="controls">
     <label>
-        <input id="autostep"
-               type="checkbox">
-        Autostep (WIP)
+        Run Type:
+        <select id="runType">
+            <option selected
+                    value="manual">Manual Stepping
+            </option>
+            <option value="autoStepDelay">Auto Stepping, with X ms delay</option>
+            <option value="autoStepGroupDraw">Auto Stepping, with draw every X steps</option>
+        </select>
+    </label>
+    <label>
+        X:
+        <input id="inputX"
+               type="number"
+               min="1"
+               value="1"
+               disabled>
     </label>
     <button id="startButton">
         Start
