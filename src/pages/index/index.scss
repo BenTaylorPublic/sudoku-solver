@@ -76,4 +76,27 @@ body {
 
 #controls {
   margin-top: 10px;
+
+  button {
+    width: 90px;
+    height: 30px;
+    border-radius: 0px;
+    outline: none;
+    border: none;
+
+    &:disabled {
+      background-color: #990000;
+      color: white;
+    }
+
+    &:not(:disabled) {
+      background-color: #009900;
+      color: black;
+    }
+  }
+}
+
+//Shared
+.displayNone {
+  display: none;
 }

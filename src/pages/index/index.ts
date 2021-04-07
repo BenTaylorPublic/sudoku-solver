@@ -21,6 +21,7 @@ class IndexView {
         this.runTypeSelect = document.getElementById("runType") as HTMLSelectElement;
         this.runTypeSelect.onchange = this.runTypeChange.bind(this);
         this.inputX = document.getElementById("inputX") as HTMLInputElement;
+        this.inputX.onchange = this.validate.bind(this);
         this.createEntryInputs();
         this.validate();
         this.createVisualizationDivs();
@@ -85,6 +86,13 @@ class IndexView {
             return;
         }
 
+
+        if (Number(this.inputX.value) <= 0) {
+            //Invalid
+            this.startButton.disabled = true;
+            return;
+        }
+
         this.startButton.disabled = false;
     }
 
@@ -123,14 +131,16 @@ class IndexView {
     private static runTypeChange(): void {
         const value: RunType = this.runTypeSelect.value as RunType;
         if (value === "manual") {
-            this.inputX.disabled = true;
+            this.inputX.parentElement?.classList.add("displayNone");
         } else {
-            this.inputX.disabled = false;
+            this.inputX.parentElement?.classList.remove("displayNone");
         }
     }
 
     private static start(): void {
-        this.startButton.disabled = true;
+        this.startButton.classList.add("displayNone");
+        this.runTypeSelect.parentElement?.classList.add("displayNone");
+        this.inputX.parentElement?.classList.add("displayNone");
 
         const startingState: SudokuState = new SudokuState();
 
@@ -183,7 +193,7 @@ class IndexView {
             } while (true);
             this.draw(state);
         } else if (autoStep === "manual") {
-            this.stepButton.disabled = false;
+            this.stepButton.classList.remove("displayNone");
         }
 
     }

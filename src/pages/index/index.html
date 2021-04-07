@@ -27,7 +27,8 @@
 <div id="controls">
     <label>
         Run Type:
-        <select id="runType">
+        <select id="runType"
+                autocomplete="off">
             <option selected
                     value="manual">Manual Stepping
             </option>
@@ -35,19 +36,20 @@
             <option value="autoStepGroupDraw">Auto Stepping, with draw every X steps</option>
         </select>
     </label>
-    <label>
+    <label class="displayNone">
         X:
         <input id="inputX"
                type="number"
                min="1"
                value="1"
-               disabled>
+               autocomplete="off">
     </label>
-    <button id="startButton">
+    <button id="startButton"
+            disabled>
         Start
     </button>
     <button id="stepButton"
-            disabled>
+            class="displayNone">
         Step
     </button>
 </div>
