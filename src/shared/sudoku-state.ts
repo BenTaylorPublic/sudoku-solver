@@ -47,6 +47,25 @@ export class SudokuState {
         return true;
     }
 
+    //Gets first open cell, going Left to right, top to bottom
+    get firstOpenCell(): CellXY {
+        for (let y: number = 0; y < 9; y++) {
+            for (let x: number = 0; x < 9; x++) {
+                if (this.cells[y][x].needsValue) {
+                    return {
+                        x: x as ZeroToEight,
+                        y: y as ZeroToEight
+                    };
+                }
+            }
+        }
+        throw new Error("No open cells");
+    }
+
+    public isValid2(cellXY: CellXY, value: number): boolean {
+        return this.isValid(cellXY.x, cellXY.y, value);
+    }
+
     public isValid(x: number, y: number, value: number): boolean {
         //Make sure cell isn't set
         if (!this.cells[y][x].needsValue) {

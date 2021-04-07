@@ -8,6 +8,7 @@ export class DepthFirst implements SudokuAlgorithm {
 
     private stack: SudokuState[];
     private _givenUp: string | null;
+    private nextToAssign: number = 1;
 
     constructor() {
         this.stack = [];
@@ -21,6 +22,7 @@ export class DepthFirst implements SudokuAlgorithm {
     step(): DrawableSudokuState {
         const current: SudokuState | undefined = this.stack.pop();
         if (current == null) {
+            console.error("Stack is empty");
             this._givenUp = "Stack is empty";
             const empty: SudokuState = new SudokuState();
             return new DrawableSudokuState(empty.cells, {
@@ -29,7 +31,15 @@ export class DepthFirst implements SudokuAlgorithm {
             }, StepAction.FailedToAssign);
         }
 
-        current.cells[0][0].value = 1;
+        const firstOpenCell: CellXY = current.firstOpenCell;
+        for (let i = this.nextToAssign; i < 9; i++) {
+            if (current.isValid2(firstOpenCell, i)) {
+                //Not sure about this yet...
+                if (i < 9) {
+                    this.nextToAssign = i + 1;
+                }
+            }
+        }
         return new DrawableSudokuState(current.cells, {
             x: 0,
             y: 0
