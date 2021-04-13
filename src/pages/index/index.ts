@@ -4,9 +4,12 @@ import {DepthFirst} from "../../shared/algorithms/depth-first";
 import {SudokuCell} from "../../shared/sudoku-cell";
 import {DrawableSudokuState} from "../../shared/drawable-sudoku-state";
 import {StepAction} from "../../shared/enums";
+import {PredefinedState} from "../../shared/interfaces";
+import {PredefinedStates} from "../../shared/predefined-states";
 
 class IndexView {
 
+    private static predefinedStatesSelect: HTMLSelectElement;
     private static startButton: HTMLButtonElement;
     private static stepButton: HTMLButtonElement;
     private static runTypeSelect: HTMLSelectElement;
@@ -22,9 +25,23 @@ class IndexView {
         this.runTypeSelect.onchange = this.runTypeChange.bind(this);
         this.inputX = document.getElementById("inputX") as HTMLInputElement;
         this.inputX.onchange = this.validate.bind(this);
+        this.predefinedStatesSelect = document.getElementById("predefinedStates") as HTMLSelectElement;
+        this.predefinedStatesSelect.onchange = this.predefinedStatesChange.bind(this);
+        this.createPredefinedStatesOptions();
         this.createEntryInputs();
         this.validate();
         this.createVisualizationDivs();
+    }
+
+    private static createPredefinedStatesOptions(): void {
+        const predefinedStates: PredefinedState[] = PredefinedStates.getStates();
+        for (let i: number = 0; i < predefinedStates.length; i++) {
+            const predefinedState: PredefinedState = predefinedStates[i];
+            const option: HTMLOptionElement = document.createElement("option");
+            option.value = predefinedState.name;
+            option.innerText = predefinedState.name;
+            this.predefinedStatesSelect.appendChild(option);
+        }
     }
 
     private static createEntryInputs(): void {
@@ -126,6 +143,39 @@ class IndexView {
                 visualizationBoxes.appendChild(horizontalSection);
             }
         }
+    }
+
+    private static predefinedStatesChange(): void {
+        const value: string = this.predefinedStatesSelect.value;
+        const predefinedStates: PredefinedState[] = PredefinedStates.getStates();
+        let predefinedState: PredefinedState | null = null;
+        for (let i: number = 0; i < predefinedStates.length; i++) {
+            if (predefinedStates[i].name === value) {
+                predefinedState = predefinedStates[i];
+                break;
+            }
+        }
+        if (predefinedState == null) {
+            //Just make one that clears it
+            predefinedState = {
+                name: "Empty",
+                state: new SudokuState()
+            };
+        }
+
+        for (let y: number = 0; y < 9; y++) {
+            for (let x: number = 0; x < 9; x++) {
+                const id: string = `i-${y}-${x}`;
+                const input: HTMLInputElement = document.getElementById(id) as HTMLInputElement;
+                const valueOfCell: number | null = predefinedState.state.cells[y][x].value;
+                if (valueOfCell != null) {
+                    input.value = valueOfCell.toString();
+                } else {
+                    input.value = "";
+                }
+            }
+        }
+        this.validate();
     }
 
     private static runTypeChange(): void {

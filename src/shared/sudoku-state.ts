@@ -1,4 +1,5 @@
 import {SudokuCell} from "./sudoku-cell";
+import {CellXY} from "./interfaces";
 
 export class SudokuState {
     public cells: SudokuCell[][];
