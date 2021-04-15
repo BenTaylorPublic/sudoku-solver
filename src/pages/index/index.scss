@@ -96,6 +96,17 @@ body {
   }
 }
 
+#textOutput {
+  &:not(.displayNone) {
+    display: flex;
+  }
+
+  > div {
+    border: 1px solid white;
+    padding: 5px;
+  }
+}
+
 span.val {
   color: purple;
 }
