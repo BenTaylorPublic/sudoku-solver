@@ -206,17 +206,37 @@ class IndexView {
             }
         }
         this.initialDraw(startingState);
-        this.solvingLogic(startingState);
+
+        const runType: RunType = (document.getElementById("runType") as HTMLInputElement).value as RunType;
+        const prettyRunType: string = runType[0].toUpperCase() + runType.slice(1, runType.length);
+        let runParamsString = `Run type: <span class="val">${prettyRunType}</span>`;
+        let xValue: number;
+        if (runType === "manual") {
+            xValue = 1;
+        } else {
+            xValue = Number(this.inputX.value);
+            runParamsString += "<br/>";
+            if (runType === "autoStepDelay") {
+                runParamsString += `Delay <span class="val">${xValue}ms</span> after every step`;
+            } else {
+                runParamsString += `Delay 1ms, after doing <span class="val">${xValue}</span> steps`;
+            }
+        }
+
+        const runParamsDiv: HTMLDivElement = document.getElementById("runParams") as HTMLDivElement;
+        runParamsDiv.innerHTML = runParamsString;
+
+
+        this.solvingLogic(startingState, runType, xValue);
     }
 
-    private static async solvingLogic(startingState: SudokuState): Promise<void> {
+    private static async solvingLogic(startingState: SudokuState, runType: RunType, x: number): Promise<void> {
         this.algorithm = new DepthFirst();
 
         this.algorithm.setup(startingState);
 
-        const autoStep: RunType = (document.getElementById("runType") as HTMLInputElement).value as RunType;
-        if (autoStep === "autoStepDelay") {
-            const delay: number = Number(this.inputX.value);
+        if (runType === "autoStepDelay") {
+            const delay: number = x;
             let state: DrawableSudokuState;
             do {
                 state = this.algorithm.step();
@@ -226,8 +246,8 @@ class IndexView {
                     break;
                 }
             } while (true);
-        } else if (autoStep === "autoStepGroupDraw") {
-            const drawEveryXSteps: number = Number(this.inputX.value);
+        } else if (runType === "autoStepGroupDraw") {
+            const drawEveryXSteps: number = x;
             let stepCount: number = 0;
             let state: DrawableSudokuState;
             do {
@@ -244,7 +264,7 @@ class IndexView {
                 }
             } while (true);
             this.draw(state);
-        } else if (autoStep === "manual") {
+        } else if (runType === "manual") {
             this.stepButton.classList.remove("displayNone");
         }
 
