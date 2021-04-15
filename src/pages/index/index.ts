@@ -82,7 +82,6 @@ class IndexView {
 
     private static validate(): void {
         //Check all values
-        let total: number = 0;
         const validValues: string[] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", ""];
         for (let y: number = 0; y < 9; y++) {
             for (let x: number = 0; x < 9; x++) {
@@ -93,18 +92,10 @@ class IndexView {
                     this.startButton.disabled = true;
                     return;
                 }
-                total += Number(input.value);
             }
         }
 
-        if (total <= 0) {
-            //Invalid
-            this.startButton.disabled = true;
-            return;
-        }
-
-
-        if (Number(this.inputX.value) <= 0) {
+        if (Number(this.inputX.value) <= 0 && this.runTypeSelect.value !== "manual") {
             //Invalid
             this.startButton.disabled = true;
             return;
@@ -185,6 +176,7 @@ class IndexView {
         } else {
             this.inputX.parentElement?.classList.remove("displayNone");
         }
+        this.validate();
     }
 
     private static start(): void {
