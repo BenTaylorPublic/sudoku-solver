@@ -185,6 +185,7 @@ class IndexView {
         this.inputX.parentElement?.classList.add("displayNone");
         this.predefinedStatesSelect.parentElement?.classList.add("displayNone");
         document.getElementById("inputBoxes")?.parentElement?.classList.add("displayNone");
+        document.getElementById("visualization")?.classList.remove("displayNone");
 
         const startingState: SudokuState = new SudokuState();
 
