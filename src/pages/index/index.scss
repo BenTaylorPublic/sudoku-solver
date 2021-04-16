@@ -1,11 +1,16 @@
 body {
   background-color: black;
   color: white;
+  font-family: monospace;
 }
 
 #content {
   margin: auto;
   width: fit-content;
+
+  h1 {
+    text-align: center;
+  }
 }
 
 #top {
@@ -101,13 +106,17 @@ body {
 }
 
 #textOutput {
+  margin: auto;
+  width: fit-content;
+
   &:not(.displayNone) {
     display: flex;
   }
 
   > div {
     border: 1px solid white;
-    padding: 5px;
+    padding: 0px 15px 15px;
+    min-width: 120px;
   }
 }
 

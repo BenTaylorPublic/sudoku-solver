@@ -316,7 +316,7 @@ class IndexView {
 
 
         const now: Date = new Date();
-        const seconds: number = Math.floor((now.getTime() - this.startTime.getTime()) / 1000);
+        const seconds: number = Math.round((now.getTime() - this.startTime.getTime()) / 10) / 100;
 
         let stats: string = `Steps: <span class="val">${this.stepCount}</span><br/>`;
         stats += `Duration: <span class="val">${seconds}s</span>`;
