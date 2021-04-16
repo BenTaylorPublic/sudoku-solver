@@ -2,7 +2,7 @@ import {SudokuAlgorithm} from "../sudoku-algorithm";
 import {SudokuState} from "../sudoku-state";
 import {DrawableSudokuState} from "../drawable-sudoku-state";
 import {StepAction} from "../enums";
-import {CellXY} from "../interfaces";
+import {CellXY, Stat} from "../interfaces";
 
 export class DepthFirst implements SudokuAlgorithm {
     public name: string = "Depth First";
@@ -26,10 +26,10 @@ export class DepthFirst implements SudokuAlgorithm {
             console.error("Stack is empty");
             this._givenUp = "Stack is empty";
             const empty: SudokuState = new SudokuState();
-            return new DrawableSudokuState(empty.cells, {
-                x: 0,
-                y: 0
-            }, StepAction.FailedToAssign);
+            return new DrawableSudokuState(empty.cells,
+                {x: 0, y: 0},
+                StepAction.FailedToAssign,
+                this.getStats());
         }
         const firstOpenCell: CellXY = current.firstOpenCell;
         const clone: SudokuState = SudokuState.clone(current);
@@ -54,11 +54,17 @@ export class DepthFirst implements SudokuAlgorithm {
             //Otherwise it is 9, so reset it to 1
             this.nextToAssign = 1;
         }
-        return new DrawableSudokuState(clone.cells, firstOpenCell, action);
+        return new DrawableSudokuState(clone.cells, firstOpenCell, action, this.getStats());
     }
 
     get givenUp(): boolean {
         return this._givenUp != null;
     }
 
+    private getStats(): Stat[] {
+        return [{
+            name: "Stack size",
+            value: this.stack.length.toString()
+        }];
+    }
 }

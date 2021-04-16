@@ -4,7 +4,7 @@ import {DepthFirst} from "../../shared/algorithms/depth-first";
 import {SudokuCell} from "../../shared/sudoku-cell";
 import {DrawableSudokuState} from "../../shared/drawable-sudoku-state";
 import {StepAction} from "../../shared/enums";
-import {PredefinedState} from "../../shared/interfaces";
+import {PredefinedState, Stat} from "../../shared/interfaces";
 import {PredefinedStates} from "../../shared/predefined-states";
 
 class IndexView {
@@ -14,19 +14,23 @@ class IndexView {
     private static stepButton: HTMLButtonElement;
     private static runTypeSelect: HTMLSelectElement;
     private static inputX: HTMLInputElement;
+    private static statsDiv: HTMLDivElement;
     private static algorithm: SudokuAlgorithm;
+    private static stepCount: number = 0;
+    private static startTime: Date;
 
     public static initialize(): void {
         this.startButton = document.getElementById("startButton") as HTMLButtonElement;
         this.startButton.onclick = this.start.bind(this);
         this.stepButton = document.getElementById("stepButton") as HTMLButtonElement;
-        this.stepButton.onclick = this.step.bind(this);
+        this.stepButton.onclick = this.manualStep.bind(this);
         this.runTypeSelect = document.getElementById("runType") as HTMLSelectElement;
         this.runTypeSelect.onchange = this.runTypeChange.bind(this);
         this.inputX = document.getElementById("inputX") as HTMLInputElement;
         this.inputX.onchange = this.validate.bind(this);
         this.predefinedStatesSelect = document.getElementById("predefinedStates") as HTMLSelectElement;
         this.predefinedStatesSelect.onchange = this.predefinedStatesChange.bind(this);
+        this.statsDiv = document.getElementById("stats") as HTMLInputElement;
         this.createPredefinedStatesOptions();
         this.createEntryInputs();
         this.validate();
@@ -226,14 +230,14 @@ class IndexView {
 
     private static async solvingLogic(startingState: SudokuState, runType: RunType, x: number): Promise<void> {
         this.algorithm = new DepthFirst();
-
+        this.startTime = new Date();
         this.algorithm.setup(startingState);
-
         if (runType === "autoStepDelay") {
             const delay: number = x;
             let state: DrawableSudokuState;
             do {
                 state = this.algorithm.step();
+                this.stepCount++;
                 this.draw(state);
                 await this.delay(delay);
                 if ((state.isSolved && state.action === StepAction.Assigned) || this.algorithm.givenUp) {
@@ -246,6 +250,7 @@ class IndexView {
             let state: DrawableSudokuState;
             do {
                 state = this.algorithm.step();
+                this.stepCount++;
                 stepCount++;
                 if (stepCount === drawEveryXSteps) {
                     stepCount = 0;
@@ -264,9 +269,10 @@ class IndexView {
 
     }
 
-    private static step(): void {
+    private static manualStep(): void {
         this.stepButton.disabled = true;
         const state: DrawableSudokuState = this.algorithm.step();
+        this.stepCount++;
         this.draw(state);
         if (state.isSolved || this.algorithm.givenUp) {
             alert("End");
@@ -307,6 +313,18 @@ class IndexView {
                 div.classList.add("failedToAssign");
             }
         }
+
+
+        const now: Date = new Date();
+        const seconds: number = Math.floor((now.getTime() - this.startTime.getTime()) / 1000);
+
+        let stats: string = `Steps: <span class="val">${this.stepCount}</span><br/>`;
+        stats += `Duration: <span class="val">${seconds}s</span>`;
+        for (let i: number = 0; i < state.stats.length; i++) {
+            const stat: Stat = state.stats[i];
+            stats += `<br/>${stat.name}: <span class="val">${stat.value}</span>`;
+        }
+        this.statsDiv.innerHTML = stats;
     }
 
     private static initialDraw(state: SudokuState): void {

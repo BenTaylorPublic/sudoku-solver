@@ -9,3 +9,8 @@ export interface PredefinedState {
     name: string;
     state: SudokuState;
 }
+
+export interface Stat {
+    name: string;
+    value: string;
+}
