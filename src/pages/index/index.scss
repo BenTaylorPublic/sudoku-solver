@@ -3,14 +3,15 @@ body {
   color: white;
 }
 
+#content {
+  margin: auto;
+  width: fit-content;
+}
+
 #top {
-  display: flex;
-  justify-content: space-between;
-  margin-left: 25%;
-  margin-right: auto;
-  left: 0;
-  right: 0;
-  width: 50%;
+  display: table;
+  width: 413px;
+  margin: auto;
 }
 
 .topSection {
@@ -20,6 +21,9 @@ body {
 
 #inputBoxes,
 #visualizationBoxes {
+  width: 326px;
+  margin: auto;
+
   .row {
     display: flex;
 

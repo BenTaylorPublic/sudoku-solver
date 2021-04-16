@@ -9,66 +9,68 @@
     <script defer src="index.bundle.js"></script>
 </head>
 <body>
-<div id="top">
-    <div id="entry"
-         class="topSection">
-        <h2>Input</h2>
-        <div id="inputBoxes">
-            <!--Entry div, inputs are injected here-->
+<div id="content">
+    <div id="top">
+        <div id="entry"
+             class="topSection">
+            <h2>Input</h2>
+            <div id="inputBoxes">
+                <!--Entry div, inputs are injected here-->
+            </div>
+        </div>
+        <div id="visualization"
+             class="topSection displayNone">
+            <h2>Visualization</h2>
+            <div id="visualizationBoxes">
+                <!--Visualization div, divs are injected here-->
+            </div>
         </div>
     </div>
-    <div id="visualization"
-         class="topSection displayNone">
-        <h2>Visualization</h2>
-        <div id="visualizationBoxes">
-            <!--Visualization div, divs are injected here-->
+    <div id="textOutput"
+         class="displayNone">
+        <div>
+            <h3>Run Parameters</h3>
+            <div id="runParams"></div>
         </div>
     </div>
-</div>
-<div id="textOutput"
-     class="displayNone">
-    <div>
-        <h3>Run Parameters</h3>
-        <div id="runParams"></div>
+    <div id="controls">
+        <label>
+            Predefined States:
+            <select id="predefinedStates"
+                    autocomplete="off">
+                <option selected
+                        value="default">Default
+                </option>
+            </select>
+        </label>
+        <label>
+            Run Type:
+            <select id="runType"
+                    autocomplete="off">
+                <option selected
+                        value="autoStepDelay">Auto Stepping, with X ms delay
+                </option>
+                <option value="autoStepGroupDraw">Auto Stepping, with draw every X steps</option>
+                <option value="manual">Manual Stepping
+                </option>
+            </select>
+        </label>
+        <label>
+            X:
+            <input id="inputX"
+                   type="number"
+                   min="1"
+                   value="1"
+                   autocomplete="off">
+        </label>
+        <button id="startButton">
+            Start
+        </button>
+        <button id="stepButton"
+                class="displayNone">
+            Step
+        </button>
     </div>
-</div>
-<div id="controls">
-    <label>
-        Predefined States:
-        <select id="predefinedStates"
-                autocomplete="off">
-            <option selected
-                    value="default">Default
-            </option>
-        </select>
-    </label>
-    <label>
-        Run Type:
-        <select id="runType"
-                autocomplete="off">
-            <option selected
-                    value="autoStepDelay">Auto Stepping, with X ms delay
-            </option>
-            <option value="autoStepGroupDraw">Auto Stepping, with draw every X steps</option>
-            <option value="manual">Manual Stepping
-            </option>
-        </select>
-    </label>
-    <label>
-        X:
-        <input id="inputX"
-               type="number"
-               min="1"
-               value="1"
-               autocomplete="off">
-    </label>
-    <button id="startButton">
-        Start
-    </button>
-    <button id="stepButton"
-            class="displayNone">
-        Step
-    </button>
 </div>
 </body>
 </html>
