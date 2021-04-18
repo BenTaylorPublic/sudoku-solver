@@ -11,6 +11,8 @@ export class DepthFirst implements SudokuAlgorithm {
     private _givenUp: string | null;
     private nextToAssign: number = 1;
 
+    private highestStackSize: number = 1;
+
     constructor() {
         this.stack = [];
         this._givenUp = null;
@@ -62,9 +64,16 @@ export class DepthFirst implements SudokuAlgorithm {
     }
 
     private getStats(): Stat[] {
+        const stackSize: number = this.stack.length;
+        if (stackSize > this.highestStackSize) {
+            this.highestStackSize = stackSize;
+        }
         return [{
             name: "Stack size",
-            value: this.stack.length.toString()
+            value: stackSize.toString()
+        }, {
+            name: "Highest Stack Size",
+            value: this.highestStackSize.toString()
         }];
     }
 }

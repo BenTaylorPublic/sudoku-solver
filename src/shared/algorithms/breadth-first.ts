@@ -11,6 +11,8 @@ export class BreadthFirst implements SudokuAlgorithm {
     private _givenUp: string | null;
     private nextToAssign: number = 1;
 
+    private highestQueueSize: number = 1;
+
     constructor() {
         this.queue = [];
         this._givenUp = null;
@@ -62,9 +64,16 @@ export class BreadthFirst implements SudokuAlgorithm {
     }
 
     private getStats(): Stat[] {
+        const queueSize: number = this.queue.length;
+        if (queueSize > this.highestQueueSize) {
+            this.highestQueueSize = queueSize;
+        }
         return [{
             name: "Queue size",
-            value: this.queue.length.toString()
+            value: queueSize.toString()
+        }, {
+            name: "Highest Queue Size",
+            value: this.highestQueueSize.toString()
         }];
     }
 }
