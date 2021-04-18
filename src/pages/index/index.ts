@@ -6,6 +6,7 @@ import {DrawableSudokuState} from "../../shared/drawable-sudoku-state";
 import {StepAction} from "../../shared/enums";
 import {PredefinedState, Stat} from "../../shared/interfaces";
 import {PredefinedStates} from "../../shared/predefined-states";
+import {BreadthFirst} from "../../shared/algorithms/breadth-first";
 
 class IndexView {
 
@@ -15,6 +16,7 @@ class IndexView {
     private static runTypeSelect: HTMLSelectElement;
     private static inputX: HTMLInputElement;
     private static statsDiv: HTMLDivElement;
+    private static algorithmSelect: HTMLSelectElement;
     private static algorithm: SudokuAlgorithm;
     private static stepCount: number = 0;
     private static startTime: Date;
@@ -26,6 +28,7 @@ class IndexView {
         this.stepButton.onclick = this.manualStep.bind(this);
         this.runTypeSelect = document.getElementById("runType") as HTMLSelectElement;
         this.runTypeSelect.onchange = this.runTypeChange.bind(this);
+        this.algorithmSelect = document.getElementById("algorithm") as HTMLSelectElement;
         this.inputX = document.getElementById("inputX") as HTMLInputElement;
         this.inputX.onchange = this.validate.bind(this);
         this.predefinedStatesSelect = document.getElementById("predefinedStates") as HTMLSelectElement;
@@ -173,6 +176,15 @@ class IndexView {
         this.validate();
     }
 
+    private static getAlgorithm(): SudokuAlgorithm {
+        const value: Algorithms = this.algorithmSelect.value as Algorithms;
+        if (value === "depthFirst") {
+            return new DepthFirst();
+        } else {
+            return new BreadthFirst();
+        }
+    }
+
     private static runTypeChange(): void {
         const value: RunType = this.runTypeSelect.value as RunType;
         if (value === "manual") {
@@ -188,6 +200,7 @@ class IndexView {
         this.runTypeSelect.parentElement?.classList.add("displayNone");
         this.inputX.parentElement?.classList.add("displayNone");
         this.predefinedStatesSelect.parentElement?.classList.add("displayNone");
+        this.algorithmSelect.parentElement?.classList.add("displayNone");
         document.getElementById("inputBoxes")?.parentElement?.classList.add("displayNone");
         document.getElementById("visualization")?.classList.remove("displayNone");
         document.getElementById("textOutput")?.classList.remove("displayNone");
@@ -207,7 +220,11 @@ class IndexView {
 
         const runType: RunType = (document.getElementById("runType") as HTMLInputElement).value as RunType;
         const prettyRunType: string = runType[0].toUpperCase() + runType.slice(1, runType.length);
-        let runParamsString = `Run type: <span class="val">${prettyRunType}</span>`;
+
+        this.algorithm = this.getAlgorithm();
+
+        let runParamsString = `Algorithm: <span class="val">${this.algorithm.name}</span><br/>`;
+        runParamsString += `Run type: <span class="val">${prettyRunType}</span>`;
         let xValue: number;
         if (runType === "manual") {
             xValue = 1;
@@ -220,16 +237,13 @@ class IndexView {
                 runParamsString += `Delay 1ms, after doing <span class="val">${xValue}</span> steps`;
             }
         }
-
         const runParamsDiv: HTMLDivElement = document.getElementById("runParams") as HTMLDivElement;
         runParamsDiv.innerHTML = runParamsString;
-
 
         this.solvingLogic(startingState, runType, xValue);
     }
 
     private static async solvingLogic(startingState: SudokuState, runType: RunType, x: number): Promise<void> {
-        this.algorithm = new DepthFirst();
         this.startTime = new Date();
         this.algorithm.setup(startingState);
         if (runType === "autoStepDelay") {
