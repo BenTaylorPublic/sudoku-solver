@@ -226,10 +226,14 @@ class IndexView {
         this.runForeverStatsDiv.parentElement?.classList.add("displayNone");
         this.runForeverCheckbox.checked = false;
 
+        this.runForeverStatsDiv.innerHTML = "";
+        this.statsDiv.innerHTML = "";
+
         this.algorithmSelect.value = "depthFirst";
         this.predefinedStatesSelect.value = "default";
         this.runTypeSelect.value = "autoStepDelay";
 
+        this.stepCount = 0;
 
         for (let y: number = 0; y < 9; y++) {
             for (let x: number = 0; x < 9; x++) {
@@ -301,29 +305,41 @@ class IndexView {
     private static async runForever(startingState: SudokuState, runType: RunType, x: number): Promise<void> {
         this.runForeverStatsDiv.parentElement?.classList.remove("displayNone");
 
-        const allRunTimes = [];
+        const allRunTimes: number[] = [];
+        let totalSteps: number = 0;
         while (!this.resetRequested) {
             const runForeverStartTime: Date = new Date();
 
+            this.algorithm = this.getAlgorithm();
+
             await this.solvingLogic(startingState, runType, x);
+
+            totalSteps += this.stepCount;
+            this.stepCount = 0;
 
             const now: Date = new Date();
             const seconds: number = Math.round((now.getTime() - runForeverStartTime.getTime())) / 1000;
             allRunTimes.push(seconds);
 
             let longestRun: number = 0;
+            let shortestRun: number = allRunTimes[0];
             let total: number = 0;
             for (let i: number = 0; i < allRunTimes.length; i++) {
                 if (allRunTimes[i] > longestRun) {
                     longestRun = allRunTimes[i];
                 }
+                if (allRunTimes[i] < shortestRun) {
+                    shortestRun = allRunTimes[i];
+                }
                 total += allRunTimes[i];
             }
-            const average: number = total / allRunTimes.length;
+            const average: number = Math.round((total / allRunTimes.length) * 1000) / 1000;
 
             let runForeverStats: string = `Amount of runs: <span class="val">${allRunTimes.length}</span><br/>`;
             runForeverStats += `Average run time: <span class="val">${average}s</span><br/>`;
-            runForeverStats += `Longest run time: <span class="val">${longestRun}s</span>`;
+            runForeverStats += `Longest run time: <span class="val">${longestRun}s</span><br/>`;
+            runForeverStats += `Shortest run time: <span class="val">${shortestRun}s</span><br/>`;
+            runForeverStats += `Total steps: <span class="val">${totalSteps}</span>`;
             this.runForeverStatsDiv.innerHTML = runForeverStats;
         }
     }
