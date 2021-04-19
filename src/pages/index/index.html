@@ -36,6 +36,10 @@
             <h3>Stats</h3>
             <div id="stats"></div>
         </div>
+        <div class="displayNone">
+            <h3>Multiple Run Stats</h3>
+            <div id="runForeverStats"></div>
+        </div>
     </div>
     <div id="controls">
         <label>
@@ -78,6 +82,12 @@
                    type="number"
                    min="1"
                    value="1"
+                   autocomplete="off">
+        </label>
+        <label>
+            Run Forever:
+            <input id="runForeverCheckbox"
+                   type="checkbox"
                    autocomplete="off">
         </label>
         <button id="startButton">

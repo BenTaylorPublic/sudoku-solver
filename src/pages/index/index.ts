@@ -18,7 +18,10 @@ class IndexView {
     private static runTypeSelect: HTMLSelectElement;
     private static inputX: HTMLInputElement;
     private static statsDiv: HTMLDivElement;
+    private static runForeverStatsDiv: HTMLDivElement;
     private static algorithmSelect: HTMLSelectElement;
+    private static runForeverCheckbox: HTMLInputElement;
+
     private static algorithm: SudokuAlgorithm;
     private static stepCount: number = 0;
     private static startTime: Date;
@@ -38,7 +41,9 @@ class IndexView {
         this.inputX.onchange = this.validate.bind(this);
         this.predefinedStatesSelect = document.getElementById("predefinedStates") as HTMLSelectElement;
         this.predefinedStatesSelect.onchange = this.predefinedStatesChange.bind(this);
-        this.statsDiv = document.getElementById("stats") as HTMLInputElement;
+        this.statsDiv = document.getElementById("stats") as HTMLDivElement;
+        this.runForeverStatsDiv = document.getElementById("runForeverStats") as HTMLDivElement;
+        this.runForeverCheckbox = document.getElementById("runForeverCheckbox") as HTMLInputElement;
         this.createPredefinedStatesOptions();
         this.createEntryInputs();
         this.validate();
@@ -196,8 +201,12 @@ class IndexView {
         const value: RunType = this.runTypeSelect.value as RunType;
         if (value === "manual") {
             this.inputX.parentElement?.classList.add("displayNone");
+            //Can't run forever on manual
+            this.runForeverCheckbox.checked = false;
+            this.runForeverCheckbox.parentElement?.classList.add("displayNone");
         } else {
             this.inputX.parentElement?.classList.remove("displayNone");
+            this.runForeverCheckbox.parentElement?.classList.remove("displayNone");
         }
         this.validate();
     }
@@ -209,10 +218,13 @@ class IndexView {
         this.inputX.parentElement?.classList.remove("displayNone");
         this.predefinedStatesSelect.parentElement?.classList.remove("displayNone");
         this.algorithmSelect.parentElement?.classList.remove("displayNone");
+        this.runForeverCheckbox.parentElement?.classList.remove("displayNone");
         document.getElementById("inputBoxes")?.parentElement?.classList.remove("displayNone");
         document.getElementById("visualization")?.classList.add("displayNone");
         document.getElementById("textOutput")?.classList.add("displayNone");
         this.resetButton.classList.add("displayNone");
+        this.runForeverStatsDiv.parentElement?.classList.add("displayNone");
+        this.runForeverCheckbox.checked = false;
 
         this.algorithmSelect.value = "depthFirst";
         this.predefinedStatesSelect.value = "default";
@@ -236,6 +248,7 @@ class IndexView {
         this.inputX.parentElement?.classList.add("displayNone");
         this.predefinedStatesSelect.parentElement?.classList.add("displayNone");
         this.algorithmSelect.parentElement?.classList.add("displayNone");
+        this.runForeverCheckbox.parentElement?.classList.add("displayNone");
         document.getElementById("inputBoxes")?.parentElement?.classList.add("displayNone");
         document.getElementById("visualization")?.classList.remove("displayNone");
         document.getElementById("textOutput")?.classList.remove("displayNone");
@@ -278,7 +291,41 @@ class IndexView {
 
         this.resetRequested = false;
 
-        this.solvingLogic(startingState, runType, xValue);
+        if (this.runForeverCheckbox.checked) {
+            this.runForever(startingState, runType, xValue);
+        } else {
+            this.solvingLogic(startingState, runType, xValue);
+        }
+    }
+
+    private static async runForever(startingState: SudokuState, runType: RunType, x: number): Promise<void> {
+        this.runForeverStatsDiv.parentElement?.classList.remove("displayNone");
+
+        const allRunTimes = [];
+        while (!this.resetRequested) {
+            const runForeverStartTime: Date = new Date();
+
+            await this.solvingLogic(startingState, runType, x);
+
+            const now: Date = new Date();
+            const seconds: number = Math.round((now.getTime() - runForeverStartTime.getTime())) / 1000;
+            allRunTimes.push(seconds);
+
+            let longestRun: number = 0;
+            let total: number = 0;
+            for (let i: number = 0; i < allRunTimes.length; i++) {
+                if (allRunTimes[i] > longestRun) {
+                    longestRun = allRunTimes[i];
+                }
+                total += allRunTimes[i];
+            }
+            const average: number = total / allRunTimes.length;
+
+            let runForeverStats: string = `Amount of runs: <span class="val">${allRunTimes.length}</span><br/>`;
+            runForeverStats += `Average run time: <span class="val">${average}s</span><br/>`;
+            runForeverStats += `Longest run time: <span class="val">${longestRun}s</span>`;
+            this.runForeverStatsDiv.innerHTML = runForeverStats;
+        }
     }
 
     private static async solvingLogic(startingState: SudokuState, runType: RunType, x: number): Promise<void> {
