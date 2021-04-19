@@ -60,6 +60,14 @@ body {
           &.failedToAssign {
             background-color: #990000;
           }
+
+          &.logicalFoundOption {
+            background-color: #A200FF;
+          }
+
+          &.logicalFoundSecondOption {
+            background-color: #FFC200;
+          }
         }
 
 

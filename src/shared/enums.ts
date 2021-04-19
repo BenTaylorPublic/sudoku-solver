@@ -1,4 +1,6 @@
 export enum StepAction {
     Assigned,
-    FailedToAssign
+    FailedToAssign,
+    LogicalFoundOption,
+    LogicalFoundSecondOption
 }

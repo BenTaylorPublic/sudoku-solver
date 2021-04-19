@@ -7,6 +7,7 @@ import {StepAction} from "../../shared/enums";
 import {PredefinedState, Stat} from "../../shared/interfaces";
 import {PredefinedStates} from "../../shared/predefined-states";
 import {BreadthFirst} from "../../shared/algorithms/breadth-first";
+import {Logical} from "../../shared/algorithms/logical";
 
 class IndexView {
 
@@ -180,8 +181,10 @@ class IndexView {
         const value: Algorithms = this.algorithmSelect.value as Algorithms;
         if (value === "depthFirst") {
             return new DepthFirst();
-        } else {
+        } else if (value === "breadthFirst") {
             return new BreadthFirst();
+        } else {
+            return new Logical();
         }
     }
 
@@ -315,6 +318,8 @@ class IndexView {
 
                 div.classList.remove("assigned");
                 div.classList.remove("failedToAssign");
+                div.classList.remove("logicalFoundOption");
+                div.classList.remove("logicalFoundSecondOption");
             }
         }
 
@@ -323,8 +328,12 @@ class IndexView {
             const div: HTMLDivElement = document.getElementById(id) as HTMLDivElement;
             if (state.action === StepAction.Assigned) {
                 div.classList.add("assigned");
-            } else {
+            } else if (state.action === StepAction.FailedToAssign) {
                 div.classList.add("failedToAssign");
+            } else if (state.action === StepAction.LogicalFoundOption) {
+                div.classList.add("logicalFoundOption");
+            } else if (state.action === StepAction.LogicalFoundSecondOption) {
+                div.classList.add("logicalFoundSecondOption");
             }
         }
 

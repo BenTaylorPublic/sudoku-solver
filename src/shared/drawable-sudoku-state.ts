@@ -10,7 +10,10 @@ export class DrawableSudokuState extends SudokuState {
 
     constructor(cells: SudokuCell[][], lastActionedCell: CellXY, action: StepAction, stats: Stat[]) {
         super(cells);
-        this.lastActionedCell = lastActionedCell;
+        this.lastActionedCell = {
+            x: lastActionedCell.x,
+            y: lastActionedCell.y
+        };
         this.action = action;
         this.stats = stats;
     }
