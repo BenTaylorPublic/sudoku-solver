@@ -14,6 +14,7 @@ class IndexView {
     private static predefinedStatesSelect: HTMLSelectElement;
     private static startButton: HTMLButtonElement;
     private static stepButton: HTMLButtonElement;
+    private static resetButton: HTMLButtonElement;
     private static runTypeSelect: HTMLSelectElement;
     private static inputX: HTMLInputElement;
     private static statsDiv: HTMLDivElement;
@@ -21,10 +22,13 @@ class IndexView {
     private static algorithm: SudokuAlgorithm;
     private static stepCount: number = 0;
     private static startTime: Date;
+    private static resetRequested: boolean = false;
 
     public static initialize(): void {
         this.startButton = document.getElementById("startButton") as HTMLButtonElement;
         this.startButton.onclick = this.start.bind(this);
+        this.resetButton = document.getElementById("resetButton") as HTMLButtonElement;
+        this.resetButton.onclick = this.reset.bind(this);
         this.stepButton = document.getElementById("stepButton") as HTMLButtonElement;
         this.stepButton.onclick = this.manualStep.bind(this);
         this.runTypeSelect = document.getElementById("runType") as HTMLSelectElement;
@@ -198,6 +202,34 @@ class IndexView {
         this.validate();
     }
 
+
+    private static reset(): void {
+        this.startButton.classList.remove("displayNone");
+        this.runTypeSelect.parentElement?.classList.remove("displayNone");
+        this.inputX.parentElement?.classList.remove("displayNone");
+        this.predefinedStatesSelect.parentElement?.classList.remove("displayNone");
+        this.algorithmSelect.parentElement?.classList.remove("displayNone");
+        document.getElementById("inputBoxes")?.parentElement?.classList.remove("displayNone");
+        document.getElementById("visualization")?.classList.add("displayNone");
+        document.getElementById("textOutput")?.classList.add("displayNone");
+        this.resetButton.classList.add("displayNone");
+
+        this.algorithmSelect.value = "depthFirst";
+        this.predefinedStatesSelect.value = "default";
+        this.runTypeSelect.value = "autoStepDelay";
+
+
+        for (let y: number = 0; y < 9; y++) {
+            for (let x: number = 0; x < 9; x++) {
+                const id: string = `i-${y}-${x}`;
+                const input: HTMLInputElement = document.getElementById(id) as HTMLInputElement;
+                input.value = "";
+            }
+        }
+
+        this.resetRequested = true;
+    }
+
     private static start(): void {
         this.startButton.classList.add("displayNone");
         this.runTypeSelect.parentElement?.classList.add("displayNone");
@@ -207,6 +239,7 @@ class IndexView {
         document.getElementById("inputBoxes")?.parentElement?.classList.add("displayNone");
         document.getElementById("visualization")?.classList.remove("displayNone");
         document.getElementById("textOutput")?.classList.remove("displayNone");
+        this.resetButton.classList.remove("displayNone");
 
         const startingState: SudokuState = new SudokuState();
 
@@ -243,6 +276,8 @@ class IndexView {
         const runParamsDiv: HTMLDivElement = document.getElementById("runParams") as HTMLDivElement;
         runParamsDiv.innerHTML = runParamsString;
 
+        this.resetRequested = false;
+
         this.solvingLogic(startingState, runType, xValue);
     }
 
@@ -257,7 +292,9 @@ class IndexView {
                 this.stepCount++;
                 this.draw(state);
                 await this.delay(delay);
-                if ((state.isSolved && state.action === StepAction.Assigned) || this.algorithm.givenUp) {
+                if ((state.isSolved && state.action === StepAction.Assigned) ||
+                    this.algorithm.givenUp ||
+                    this.resetRequested) {
                     break;
                 }
             } while (true);
@@ -275,7 +312,9 @@ class IndexView {
                     //Delay to let it draw to dom
                     await this.delay(1);
                 }
-                if ((state.isSolved && state.action === StepAction.Assigned) || this.algorithm.givenUp) {
+                if ((state.isSolved && state.action === StepAction.Assigned) ||
+                    this.algorithm.givenUp ||
+                    this.resetRequested) {
                     break;
                 }
             } while (true);
