@@ -13,6 +13,7 @@ export class Logical implements SudokuAlgorithm {
     private state: SudokuState;
     private numbersThatFit: number[];
     private cell: CellXY;
+    private changedSomethingInLoop: boolean = false;
 
     constructor() {
         this._givenUp = null;
@@ -39,6 +40,8 @@ export class Logical implements SudokuAlgorithm {
             action = StepAction.Assigned;
             this.state.cells[this.cell.y][this.cell.x].value = this.numbersThatFit[0];
             result = new DrawableSudokuState(this.state.cells, this.cell, action, this.getStats());
+            this.changedSomethingInLoop = true;
+            this.moveToNextCell();
             return result;
         }
 
@@ -96,9 +99,17 @@ export class Logical implements SudokuAlgorithm {
                 this.cell.x = 0;
                 this.cell.y++;
                 if (this.cell.y === 9) {
-                    //The end
-                    this._givenUp = "Reached the end. Will eventually loop if 1 was assigned.";
-                    console.info("Reached the end. Will eventually loop if 1 was assigned.");
+                    if (this.changedSomethingInLoop) {
+                        if (this.state.isSolved) {
+                            return;
+                        } else {
+                            this.cell = this.state.firstOpenCell;
+                            this.changedSomethingInLoop = false;
+                        }
+                    } else {
+                        console.info("Logical algorithm went a whole loop with no changes");
+                        this._givenUp = "Logical algorithm went a whole loop with no changes";
+                    }
                 }
             }
         } while (!this.state.cells[this.cell.y][this.cell.x].needsValue);

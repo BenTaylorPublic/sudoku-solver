@@ -3,7 +3,7 @@ import {SudokuState} from "./sudoku-state";
 
 export class PredefinedStates {
     public static getStates(): PredefinedState[] {
-        return [PredefinedStates.state1];
+        return [PredefinedStates.state1, PredefinedStates.state2];
     }
 
     private static get state1(): PredefinedState {
@@ -22,6 +22,26 @@ export class PredefinedStates {
 
         return {
             name: "State1",
+            state: this.convertStateStringToSudokuState(stateString)
+        };
+    }
+
+    private static get state2(): PredefinedState {
+        const stateString: string =
+            "5-- -1- --4" +
+            "274 --- 6--" +
+            "-8- 9-4 ---" +
+
+            "81- 46- 3-2" +
+            "--2 -3- 1--" +
+            "7-6 -91 -58" +
+
+            "--- 5-3 -1-" +
+            "--5 --- 927" +
+            "1-- -2- --3";
+
+        return {
+            name: "State2",
             state: this.convertStateStringToSudokuState(stateString)
         };
     }
