@@ -1,10 +1,12 @@
 {
-  "bengularVersion": "v1.1.0",
+  "bengularVersion": "v1.2.0",
   "verbose": false,
   "pagesDirectory": "./src/pages/",
   "srcDirectory": "./src/",
   "generatedDirectory": "./generated/",
   "prodDirectory": "./docs/",
   "componentsDirectory": "./src/components/",
-  "assetsDirectory": "./src/assets/"
+  "assetsDirectory": "./src/assets/",
+  "hostedPath": "",
+  "rootHtml": "/index.html"
 }
