@@ -7,6 +7,6 @@
   "prodDirectory": "./docs/",
   "componentsDirectory": "./src/components/",
   "assetsDirectory": "./src/assets/",
-  "hostedPath": "",
-  "rootHtml": "/index.html"
+  "hostedPath": "/sudoku-solver/",
+  "rootHtml": "/sudoku-solver/index.html"
 }
