@@ -132,6 +132,23 @@ span.val {
   color: #E304E3;
 }
 
+//Link back
+a {
+  width: 100%;
+  text-align: center;
+  bottom: 10px;
+  text-decoration: underline;
+  position: absolute;
+
+  &:visited,
+  &:hover,
+  &:active,
+  &:link {
+    color: white;
+  }
+}
+
+
 //Shared
 .displayNone {
   display: none;
