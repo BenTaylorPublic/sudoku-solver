@@ -48,6 +48,7 @@ class IndexView {
         this.createEntryInputs();
         this.validate();
         this.createVisualizationDivs();
+        this.detectMobiles();
     }
 
     private static createPredefinedStatesOptions(): void {
@@ -466,6 +467,19 @@ class IndexView {
                     div.classList.add("locked");
                 }
             }
+        }
+    }
+
+    private static detectMobiles(): void {
+        const toMatch = [
+            /Android/i,
+            /iPhone/i,
+        ];
+
+        if (toMatch.some((toMatchItem) => {
+            return navigator.userAgent.match(toMatchItem);
+        })) {
+            document.body.classList.add("mobile");
         }
     }
 

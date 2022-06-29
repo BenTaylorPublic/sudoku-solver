@@ -1,5 +1,5 @@
 {
-  "bengularVersion": "v1.2.0",
+  "bengularVersion": "v1.3.0",
   "verbose": false,
   "pagesDirectory": "./src/pages/",
   "srcDirectory": "./src/",
@@ -8,5 +8,6 @@
   "componentsDirectory": "./src/components/",
   "assetsDirectory": "./src/assets/",
   "hostedPath": "/sudoku-solver/",
-  "rootHtml": "/sudoku-solver/index.html"
+  "rootHtml": "/sudoku-solver/index.html",
+  "port": 4200
 }

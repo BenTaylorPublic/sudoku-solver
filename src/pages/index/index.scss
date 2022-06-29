@@ -2,11 +2,20 @@ body {
   background-color: black;
   color: white;
   font-family: monospace;
+  text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  margin: 0;
 }
 
 #content {
   margin: auto;
   width: fit-content;
+  min-height: 90vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 
   h1 {
     text-align: center;
@@ -16,7 +25,8 @@ body {
 #top {
   display: table;
   width: 413px;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .topSection {
@@ -26,7 +36,6 @@ body {
 
 #inputBoxes,
 #visualizationBoxes {
-  width: 326px;
   margin: auto;
 
   .row {
@@ -40,11 +49,11 @@ body {
       input,
       div {
         background-color: grey;
-        width: 30px;
-        height: 30px;
+        width: 2em;
+        height: 2em;
         text-align: center;
-        line-height: 30px;
-        font-size: 20px;
+        line-height: 2em;
+        font-size: 1em;
         border: 1px solid black;
         padding: 1px;
 
@@ -94,9 +103,22 @@ body {
 #controls {
   margin-top: 10px;
 
+  label {
+    display: block;
+  }
+
+  input, select {
+    font-size: 1em;
+  }
+
+  input[type=checkbox] {
+    width: 1em;
+    height: 1em;
+  }
+
   button {
-    width: 90px;
-    height: 30px;
+    padding: 0.5em 1em;
+    font-size: 1em;
     border-radius: 0px;
     outline: none;
     border: none;
@@ -132,24 +154,51 @@ span.val {
   color: #E304E3;
 }
 
-//Link back
-a {
-  width: 100%;
-  text-align: center;
-  bottom: 10px;
-  text-decoration: underline;
-  position: absolute;
 
-  &:visited,
-  &:hover,
-  &:active,
-  &:link {
-    color: white;
+#footerWrapper {
+  flex-grow: 1;
+  min-height: 2em;
+
+  //Link back
+  a {
+    width: 100%;
+    display: block;
+    text-align: center;
+    text-decoration: underline;
+    font-size: 1em;
+    position: absolute;
+    bottom: 0;
+
+    &:visited,
+    &:hover,
+    &:active,
+    &:link {
+      color: white;
+    }
   }
 }
 
-
 //Shared
 .displayNone {
-  display: none;
+  display: none !important;
+}
+
+body:not(.mobile) {
+  font-size: 14px;
+  line-height: 25px;
+
+  #inputBoxes,
+  #visualizationBoxes {
+    width: 318px;
+  }
+}
+
+body.mobile {
+  font-size: 38px;
+  line-height: 56px;
+
+  #inputBoxes,
+  #visualizationBoxes {
+    width: 750px;
+  }
 }
